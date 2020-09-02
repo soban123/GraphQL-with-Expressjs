@@ -12,6 +12,9 @@ var schema = buildSchema(`
       course( id : Int! ) : Course
       courses( topic : String! ) : [Course]
   }
+  type Mutation {
+      updateTopic( id : Int! , topic : String! ): Course
+  }
 `);
 
 const data  = [
@@ -40,9 +43,16 @@ const getCourses = function(args){
     return data ; 
 }
 
+const updateTopicOfCourse = function(args){
+    console.log(args)
+   let changeData = data.map( e => { if (e.id == args.id) { e.title = args.topic ; return e  } })
+    return changeData[0] ; 
+}
+
 var root = { 
     course : getCourse ,
-    courses : getCourses
+    courses : getCourses , 
+    updateTopic : updateTopicOfCourse
  };
 
 var app = express();
