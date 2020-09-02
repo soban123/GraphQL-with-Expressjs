@@ -2,6 +2,10 @@ var express = require('express');
 var { graphqlHTTP } = require('express-graphql');
 var { buildSchema } = require('graphql');
 
+
+var cors = require('cors')
+
+
 var schema = buildSchema(`
   type Course {
     id: Int
@@ -45,8 +49,9 @@ const getCourses = function(args){
 
 const updateTopicOfCourse = function(args){
     console.log(args)
-   let changeData = data.map( e => { if (e.id == args.id) { e.title = args.topic ; return e  } })
-    return changeData[0] ; 
+   let changeData = data.find( e => { if (e.id == args.id) { e.title = args.topic ; return e  } })
+   console.log(changeData)
+    return changeData ; 
 }
 
 var root = { 
@@ -56,6 +61,9 @@ var root = {
  };
 
 var app = express();
+
+ 
+app.use(cors())
 app.use('/graphql', graphqlHTTP({
   schema: schema,
   rootValue: root,
